@@ -16,17 +16,22 @@ class MyThread extends Thread implements Runnable{
                 Thread.sleep(timeOut);
                 System.out.printf("Я поток %s. Всем привет!\n", currentName);
                 if (buffer.getSleepComand(currentName)){
+                    boolean needToSleep = false;
+
                     synchronized (buffer) {
                         // мы этот момент еще не изучали, но судя по всему, правильно делать именно так
                         if (buffer.getSleepComand(currentName)){
-                            System.out.printf("Я поток %s. Я ложусь спать!\n", currentName);
+                            needToSleep = true;
                             buffer.setSleepComand(currentName, false);
-                                Thread.sleep(timeOut15);
-                                System.out.printf("Я поток %s. Я долго спал!\n", currentName);
-                            }
                         }
                     }
+                    if (needToSleep) {
+                        System.out.printf("Я поток %s. Я ложусь спать!\n", currentName);
+                        Thread.sleep(timeOut15);
+                        System.out.printf("Я поток %s. Я долго спал!\n", currentName);
+                    }
                 }
+            }
         } catch (InterruptedException e) {
             //e.printStackTrace();
         } finally{
